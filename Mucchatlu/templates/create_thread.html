@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h2>Create a New Thread</h2>
+</div>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="title" class="form-label">Thread Title</label>
+        <input type="text" name="title" id="title" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-success">Create</button>
+</form>
+<a href="{% url 'home' %}" class="btn btn-link mt-3">Back to Threads</a>
+{% endblock %}

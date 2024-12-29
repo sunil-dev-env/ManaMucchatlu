@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="mb-3">{{ thread.title }}</h2>
+    <div class="bg-light p-3 rounded mb-4">
+        <h5>Messages</h5>
+        <ul class="list-group">
+            {% for message in messages %}
+            <li class="list-group-item" id="message-{{ message.id }}">
+                <strong>{{ message.nickname }}</strong>: {{ message.content }}
+                <small class="text-muted float-end">{{ message.created_at|date:"H:i, F j" }}</small>
+                
+                <!-- Reply Button -->
+                <button class="btn btn-link btn-sm text-primary" onclick="showReplyForm('{{ message.id }}')">Reply</button>
+                
+                <!-- Reply Form - Hidden initially -->
+                <form method="post" id="replyForm-{{ message.id }}" style="display: none;">
+                    {% csrf_token %}
+                    <input type="hidden" name="parent_id" value="{{ message.id }}">
+                    <div class="mb-3">
+                        <label for="content-{{ message.id }}" class="form-label">Message</label>
+                        <textarea name="content" id="content-{{ message.id }}" rows="3" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+
+                <!-- Replies Section -->
+                <ul class="list-group mt-2">
+                    {% for reply in message.replies.all %}
+                    <li class="list-group-item ms-4">
+                        <strong>{{ reply.nickname }}</strong>: {{ reply.content }}
+                        <small class="text-muted float-end">{{ reply.created_at|date:"H:i, F j" }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Main message form -->
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="content" class="form-label">Message</label>
+        <textarea name="content" id="content" rows="3" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>
+
+<a href="{% url 'home' %}" class="btn btn-link mt-3">Back to Threads</a>
+
+<script>
+    // Show the reply form when clicking the "Reply" button
+    function showReplyForm(parentId) {
+        // Hide all other reply forms
+        var allForms = document.querySelectorAll('[id^="replyForm-"]');
+        allForms.forEach(function(form) {
+            form.style.display = 'none';
+        });
+
+        // Show the specific reply form for the clicked message
+        var replyForm = document.getElementById('replyForm-' + parentId);
+        replyForm.style.display = 'block';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center">
+    <h2>Enter Your Nickname</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input type="text" name="nickname" class="form-control" placeholder="Enter your nickname" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

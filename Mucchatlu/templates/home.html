@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1>Kasepu Mucchatlu Pettukundham kani Mowa!!!</h1>
+    <br>
+    <form class="d-flex justify-content-center" method="get">
+        <input type="text" name="search" class="form-control w-50 me-2" placeholder="Search threads...">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+<div class="row">
+    {% for thread in threads %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ thread.title }}</h5>
+                <p class="card-text"><small class="text-muted">Created on {{ thread.created_at|date:"F j, Y" }}</small></p>
+                <a href="{% url 'thread_detail' thread.id %}" class="btn btn-outline-primary">Join Discussion</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<a href="{% url 'create_thread' %}" class="btn btn-success mt-3">Create New Thread</a>
+{% endblock %}
